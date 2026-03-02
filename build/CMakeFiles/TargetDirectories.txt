@@ -1,0 +1,3 @@
+/home/temp/afapontes/Master/build/CMakeFiles/app.dir
+/home/temp/afapontes/Master/build/CMakeFiles/edit_cache.dir
+/home/temp/afapontes/Master/build/CMakeFiles/rebuild_cache.dir
