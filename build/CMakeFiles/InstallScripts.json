@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/root/mestrado/OpenGL/build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

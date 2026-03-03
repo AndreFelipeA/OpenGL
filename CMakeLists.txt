@@ -4,6 +4,9 @@ project(PTG)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+add_compile_definitions(GLFW_HAS_GETPLATFORM=0)
+add_compile_definitions(RES_PATH="${CMAKE_SOURCE_DIR}/res/")
+add_compile_definitions(TEXTURES_PATH="${CMAKE_SOURCE_DIR}/res/textures/")
 # -----------------------------
 # Encontrar OpenGL e GLFW
 # -----------------------------
