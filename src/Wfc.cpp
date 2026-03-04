@@ -13,15 +13,14 @@ WFC::WFC(int rows, int cols, int depth, TileSet image, unsigned int seed) : grid
 
     unsigned int randomSeed = std::random_device{}();
     rng.seed(randomSeed);
+    std::cout << randomSeed;
 
     createEdges(image);
     //createCompatibilitys();
     addPossibleTiles();
-    //printBoard();
-    // printEdges();
+    printTiles();
+    printBoard();
 
-     //printTiles();
-    // return;
     while (true)
     {
         ObserveStatus status = observe();
@@ -57,7 +56,7 @@ ObserveStatus WFC::observe()
 
     Wave* wave = *waveOpt;
     getRandomTile(wave, m_Seed);
-    std::cout << "escolhi: " << wave->x << wave->y << wave->z << "\n";
+    // std::cout << "escolhi: " << wave->x << wave->y << wave->z << "\n";
 
     if (queue.empty())
     {
@@ -74,88 +73,66 @@ void WFC::getRandomTile(Wave* wave, unsigned int seed)
 {
 
     auto& domain = wave->possibleTiles;
+  
 
     std::uniform_int_distribution<int> dist(0, domain.size() - 1);
     int idx = dist(rng);
 
-    int chosenId = domain[idx];
+    
+    int chosenId = tiles[idx].id;;
+
+    // std::cout << "escolhi o tile: " << chosenId << "\n";
+    //   for(auto i: domain )
+    // {
+    //     std::cout << i;
+    // }
+    // std::cout << "\n";
 
     domain.clear();
     domain.push_back(chosenId);
 
     wave->tileID = chosenId;
-    //std::cout << "escolhi o tile " << grid.graph[x][y].tileID << " na posicao " << x << "," << y << "\n";
-    //std::cout << "Random: " << random << " PossibleTiles: " << grid.graph[x][y].tile.possibleTiles.size() << " Tile: " << id<< "\n";
 
 
-    // std::cout << "Tile " << grid.graph[x][y].tile.id << ": ";
-
-    // std::cout << "Compatible UP: ";
-    // for(int j = 0; j <  grid.graph[x][y].tile.compatible[UP].size(); j++)
-    // {
-    //     std::cout <<   grid.graph[x][y].tile.compatible[UP][j] << " ";
-    // }
-
-    // std::cout << "Compatible DOWN: ";
-    // for(int j = 0; j <   grid.graph[x][y].tile.compatible[DOWN].size(); j++)
-    // {
-    //     std::cout <<   grid.graph[x][y].tile.compatible[DOWN][j] << " ";
-    // }
-
-    // std::cout << "Compatible RIGHT: ";
-    // for(int j = 0; j <   grid.graph[x][y].tile.compatible[RIGHT].size(); j++)
-    // {
-    //     std::cout <<   grid.graph[x][y].tile.compatible[RIGHT][j] << " ";
-    // }
-
-    // std::cout << "Compatible LEFT: ";
-    // for(int j = 0; j < grid.graph[x][y].tile.compatible[LEFT].size(); j++)
-    // {
-    //     std::cout <<  grid.graph[x][y].tile.compatible[LEFT][j] << " ";
-    // }
-    // std::cout << "\n";
-
-    // std::cout << random << "\n" << "tile size:" << tiles.size() << "\n";
 }
 
 
 bool WFC::AC3()
 {
-    const int dx[] = { 1,-1, 0, 0, 0, 0 };
-    const int dy[] = { 0, 0, 1,-1, 0, 0 };
-    const int dz[] = { 0, 0, 0, 0, 1,-1 };
+    const int dx[] = { 0, 0, -1, 1, 0, 0 };
+    const int dy[] = { 1,-1,  0, 0, 0, 0 };
+    const int dz[] = { 0, 0,  0, 0, 1,-1 };
 
     while (!queue.empty())
     {
-        std::cout << "ac3\n";
+        // std::cout << "ac3\n";
         Wave* wave = queue.front();
         queue.pop();
 
 
         for (int i = 0; i < 6; i++)
         {
-            std::cout << "i: " << i << "\n";
+            // std::cout << "i: " << i << "\n";
             int cx = wave->x + dx[i];
             int cy = wave->y + dy[i];
             int cz = wave->z + dz[i];
-            std::cout << "nei: " << cx << cy << cz << "\n";
-            std::cout << "pai" << wave->x << wave->y << wave->z << "\n";
-
+            
             Wave* child = grid.tryAt(cx,cy,cz);
             if (child == nullptr) continue;
-
+            // std::cout << "nei: " << cx << cy << cz << "\n";
+            // std::cout << "pai" << wave->x << wave->y << wave->z << "\n";
             bool changed = restraintPropagation(wave, child);
 
             if (child->possibleTiles.empty())
             {
-                std::cout << "Contradicao em " << cx << "," << cy << "," << cz << "\n";
+                // std::cout << "Contradicao em " << cx << "," << cy << "," << cz << "\n";
                 return false;
             }
 
 
             if (changed)
                 queue.push(child);
-            std::cout << "empilheei child\n";
+            // std::cout << "empilheei child\n";
 
         }
 
@@ -166,41 +143,52 @@ bool WFC::AC3()
 
 bool WFC::isCompatible(int fatherTileId, int childTileId, int direction)
 {
-    std::cout << "Compatible\n";
+    // std::cout << "Compatible\n";
     int childDir = opossiteDirection(direction);
 
-    auto& fatherCompat = tiles[fatherTileId].compatible[direction];
+    int fatherTile = getTileIndexValue(fatherTileId); 
+
+    int childTile = getTileIndexValue(childTileId);
+
+
+    std::vector<int> fatherCompat = tiles[fatherTile].compatible[direction];
+
 
     bool fatherAcceptsChild = std::find(fatherCompat.begin(), fatherCompat.end(), childTileId) != fatherCompat.end();
 
     // Pega os compatíveis do filho na direção oposta
-    auto& childCompat = tiles[childTileId].compatible[childDir];
+    std::vector<int> childCompat = tiles[childTile].compatible[childDir];
 
     // Verifica se o ID do pai está na lista do filho
     bool childAcceptsFather = std::find(childCompat.begin(), childCompat.end(), fatherTileId) != childCompat.end();
 
-
+    std::cout << fatherAcceptsChild << childAcceptsFather << "\n";
 
     return fatherAcceptsChild && childAcceptsFather;
 }
 
 bool WFC::restraintPropagation(Wave* father, Wave* child)
 {
-    std::cout << "restraint propagation\n";
+    if (child == nullptr) 
+    {
+        std::cout << "Erro: child é nulo!" << std::endl;
+        return false;
+    }
+    // std::cout << "restraint propagation\n";
     int direction = checkDirection(*father, *child);
     std::vector<int> remove;
-    std::cout << "check direction\n";
-    std::cout << "father: " << father->x << father->y << father->z << "Child: " << child->x << child->y << child->z << "\n";
+    // std::cout << "check direction\n";
+    // std::cout << "father: " << father->x << father->y << father->z << "Child: " << child->x << child->y << child->z << "\n";
     for (int childTileId : child->possibleTiles)
     {
-        std::cout << "possible\n";
-
+        
         bool hasSupport = false;
-
+        
         for (int fatherTileId : father->possibleTiles)
         {
             if (isCompatible(fatherTileId, childTileId, direction))
             {
+                // std::cout << "possible\n";
                 hasSupport = true;
                 break;
             }
@@ -227,7 +215,7 @@ bool WFC::restraintPropagation(Wave* father, Wave* child)
         if (it != child->possibleTiles.end())
             child->possibleTiles.erase(it);
     }
-
+    // std::cout << "fim restraint\n";
     return true;
 }
 
@@ -298,8 +286,13 @@ void WFC::addPossibleTiles()
                 wave->x = i;
                 wave->y = j;
                 wave->z = k;
-                for (int x = 0; x < tiles.size(); ++x)
-                    wave->possibleTiles.push_back(x);
+                // std::cout << "grid: " << i << j << k;
+                for (int x = 0; x < tiles.size(); x++)
+                {
+                    wave->possibleTiles.push_back(tiles[x].id);
+                    // std::cout << "inseri: " << tiles[x].id;
+                }
+                // std::cout << "\n";
             }
         }
     }
@@ -362,6 +355,19 @@ int WFC::opossiteDirection(int direction)
     }
 }
 
+int WFC::getTileIndexValue(int tileID)
+{
+    for(int i = 0; i < tiles.size(); i++)
+    {
+        if(tiles[i].id == tileID)
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 void WFC::printTiles()
 {
 
@@ -413,7 +419,7 @@ void WFC::printBoard()
 
                 for (int x = 0; x < wave.possibleTiles.size(); x++)
                 {
-                    std::cout << x;
+                    std::cout << wave.possibleTiles[x];
                 }
                 std::cout << "\n";
             }

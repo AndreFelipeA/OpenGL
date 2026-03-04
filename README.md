@@ -25,3 +25,6 @@ cp include/GL/glxew.h $HOME/.local/include/GL/
 baixar o glm:
 git clone https://github.com/g-truc/glm.git
 cp -r glm/glm /usr/local/include/
+
+build 
+cmake .. -DCMAKE_PREFIX_PATH=$HOME/.local

@@ -57,6 +57,8 @@ public:
 
     Grid3D getGrid() { return grid; };
 
+    int getTileIndexValue(int tileID);
+
 private:
     unsigned int m_Seed;
 

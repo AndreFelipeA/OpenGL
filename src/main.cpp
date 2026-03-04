@@ -44,8 +44,8 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
     lastX = xpos;
     lastY = ypos;
 
-    xoffset *= 0.1f;
-    yoffset *= 0.1f;
+    xoffset *= 0.001f;
+    yoffset *= 0.001f;
 
     yaw   += xoffset;
     pitch += yoffset;
@@ -64,13 +64,26 @@ void processInput(GLFWwindow* window)
 {
     const float cameraSpeed = 5.5f * deltaTime;
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    {
         cameraPos += cameraSpeed * cameraFront;
+        // std::cout << "W\n";
+    }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    {
         cameraPos -= cameraSpeed * cameraFront;
+        // std::cout << "S\n";
+
+    }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    {
         cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        // std::cout << "A\n";
+    }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    {
         cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        // std::cout << "D\n";
+    }
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 }
@@ -152,7 +165,7 @@ int main() {
     tiles.LoadFromFolder(texturesPath);
 
     // Roda o WFC
-    WFC WFC(5, 5, 5, tiles, 0);
+    WFC WFC(3, 3, 3, tiles, 0);
     Grid3D grid = WFC.getGrid();
 
     ImGui::CreateContext();
@@ -185,12 +198,14 @@ int main() {
                     if (!wave || wave->tileID == UNCOLLAPSED) continue;
 
                     int tileID = wave->tileID;
-                    if (tileID < 0 || tileID >= tiles.textures.size()) continue;
+                    // if (tileID < 0 || tileID >= tiles.textures.size()) continue;
 
                     glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(i * 1.1f, j * 1.1f, k * 1.1f));
                     glm::mat4 mvp = proj * view * model;
+                    
+                    
 
-                    tiles.textures[tileID]->Bind(0);
+                    tiles.textures[WFC.getTileIndexValue(tileID)]->Bind(0);
                     shader.Bind();
                     shader.SetUniformMat4f("u_MVP", mvp);
                     shader.SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);

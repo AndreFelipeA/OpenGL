@@ -4,6 +4,10 @@ project(PTG)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_BUILD_TYPE DEBUG)
+
+set(CMAKE_CXX_FLAGS_DEBUG "-g -fsanitize=address -fno-omit-frame-pointer")
+
 add_compile_definitions(GLFW_HAS_GETPLATFORM=0)
 add_compile_definitions(RES_PATH="${CMAKE_SOURCE_DIR}/res/")
 add_compile_definitions(TEXTURES_PATH="${CMAKE_SOURCE_DIR}/res/textures/")
