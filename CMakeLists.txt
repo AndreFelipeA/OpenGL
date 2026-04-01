@@ -62,6 +62,7 @@ add_executable(app
     src/VertexBuffer.cpp
     src/VertexBufferLayout.cpp
     src/Wfc.cpp
+    src/PerlinNoise.cpp
     ${IMGUI_SOURCES}
     ${STB_IMAGE_SOURCES}
 )

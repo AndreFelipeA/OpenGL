@@ -17,6 +17,8 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "PerlinNoise.h"
+#include <random>
 
 const unsigned int SCR_WIDTH = 1600;
 const unsigned int SCR_HEIGHT = 1200;
@@ -31,6 +33,10 @@ float yaw   = -90.0f;
 float pitch = 0.0f;
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
+
+unsigned int randomSeed = std::random_device{}();
+
+PerlinNoise perlin(randomSeed);
 
 static int edgeTable[256] = {
  0x0 , 0x109, 0x203, 0x30a, 0x406, 0x50f, 0x605, 0x70c,
@@ -328,12 +334,16 @@ static int triTable[256][16] = {
 
 double ScalarField(double x, double y, double z)
 {
-    double R = 1.0;
-    double r = 0.3;
-    double q = sqrt(x*x+z*z) - R;
+    // double value = 0.0;
 
-    return q*q + y*y - r*r;
-    // return x*x + y*y + z*z - 1.0;
+    // value += perlin.PerlinNoise3D(x, y, z);
+
+
+    // return value - y * 0.1;
+
+
+    return -y + perlin.PerlinOctaves3D(x,y,z,4, 2) * 10.0;
+
 }
 
 const int n = 30;
@@ -677,7 +687,7 @@ int main() {
         
         shader.Bind();
         shader.SetUniformMat4f("u_MVP", mvp);
-        shader.SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
+        shader.SetUniform4f("u_Color", 0.216f, 0.82f, 0.169f, 1.0f);
 
         va.Bind();
         glDrawArrays(GL_TRIANGLES, 0, TrianglesVertex.size()/3);

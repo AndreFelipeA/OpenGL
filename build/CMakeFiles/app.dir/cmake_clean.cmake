@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/app.dir/src/IndexBuffer.cpp.o"
   "CMakeFiles/app.dir/src/IndexBuffer.cpp.o.d"
+  "CMakeFiles/app.dir/src/PerlinNoise.cpp.o"
+  "CMakeFiles/app.dir/src/PerlinNoise.cpp.o.d"
   "CMakeFiles/app.dir/src/Renderer.cpp.o"
   "CMakeFiles/app.dir/src/Renderer.cpp.o.d"
   "CMakeFiles/app.dir/src/Shader.cpp.o"

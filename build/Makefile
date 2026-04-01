@@ -153,6 +153,30 @@ src/IndexBuffer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/app.dir/build.make CMakeFiles/app.dir/src/IndexBuffer.cpp.s
 .PHONY : src/IndexBuffer.cpp.s
 
+src/PerlinNoise.o: src/PerlinNoise.cpp.o
+.PHONY : src/PerlinNoise.o
+
+# target to build an object file
+src/PerlinNoise.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/app.dir/build.make CMakeFiles/app.dir/src/PerlinNoise.cpp.o
+.PHONY : src/PerlinNoise.cpp.o
+
+src/PerlinNoise.i: src/PerlinNoise.cpp.i
+.PHONY : src/PerlinNoise.i
+
+# target to preprocess a source file
+src/PerlinNoise.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/app.dir/build.make CMakeFiles/app.dir/src/PerlinNoise.cpp.i
+.PHONY : src/PerlinNoise.cpp.i
+
+src/PerlinNoise.s: src/PerlinNoise.cpp.s
+.PHONY : src/PerlinNoise.s
+
+# target to generate assembly for a file
+src/PerlinNoise.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/app.dir/build.make CMakeFiles/app.dir/src/PerlinNoise.cpp.s
+.PHONY : src/PerlinNoise.cpp.s
+
 src/Renderer.o: src/Renderer.cpp.o
 .PHONY : src/Renderer.o
 
@@ -549,6 +573,9 @@ help:
 	@echo "... src/IndexBuffer.o"
 	@echo "... src/IndexBuffer.i"
 	@echo "... src/IndexBuffer.s"
+	@echo "... src/PerlinNoise.o"
+	@echo "... src/PerlinNoise.i"
+	@echo "... src/PerlinNoise.s"
 	@echo "... src/Renderer.o"
 	@echo "... src/Renderer.i"
 	@echo "... src/Renderer.s"
